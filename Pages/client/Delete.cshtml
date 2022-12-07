@@ -1,0 +1,27 @@
+﻿@page
+@using System.Data.SqlClient;
+@model project.Pages.client.DeleteModel
+@{
+    try
+    {
+        String id = Request.Query["id"];
+        //connect to the database create connection string
+        string connectionstring = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=mystore;Integrated Security=True";
+
+        using (SqlConnection connection = new SqlConnection(connectionstring))//sql connection
+        {
+            connection.Open();
+            string sql = @"Delete FROM client WHERE id=@id";
+            using (SqlCommand command = new SqlCommand(sql, connection))//execute sql query with connection
+            {
+                command.Parameters.AddWithValue("@id", id);
+                command.ExecuteNonQuery();
+            }
+
+        }
+    }
+    catch (Exception)
+    {
+    }
+    Response.Redirect("/client/Index");
+}
